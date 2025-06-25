@@ -1,0 +1,40 @@
+mat-form-field{
+    width: 100%;
+}
+.mat-form-field {
+  font-size: 14px;
+}
+
+.mat-header-cell {
+  font-weight: bold;
+  background: #f5f5f5;
+}
+
+.mat-row:hover {
+  background-color: #f0f8ff;
+  transition: 0.3s;
+}
+
+.mat-card {
+  border-radius: 12px;
+}
+
+.breadcrumb {
+  background-color: #f8f9fa;
+}
+
+  .user-card-second {
+      transition: transform 0.3s ease;
+      background-color: #ffffff; /* Ensure card is distinct from the page */
+      border-radius: 10px;
+    }
+.user-card-second:hover {
+    transform: translateY(-5px) scale(1.02);
+    z-index: 2;
+}
+
+.user-img {
+ max-height: 130px;
+  object-fit: cover;
+  border-radius: 8px;
+}

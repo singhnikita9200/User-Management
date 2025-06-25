@@ -1,0 +1,21 @@
+.wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: auto; /* Scroll only if needed */
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.container {
+  max-width: 600px;
+  width: 100%;
+}
+mat-card {
+  border-radius: 12px;
+}
+
+mat-form-field {
+  display: block;
+}
