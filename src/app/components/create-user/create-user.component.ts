@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApiService } from '../../services/api.service';
 import { DataService } from '../../services/data.service';
 import { Router } from '@angular/router';
+import { Country } from '../../models/country.model';
 
 @Component({
   selector: 'app-create-user',
@@ -10,47 +11,47 @@ import { Router } from '@angular/router';
   templateUrl: './create-user.component.html',
   styleUrl: './create-user.component.css'
 })
-export class CreateUserComponent implements OnInit{
+export class CreateUserComponent implements OnInit {
   userForm: FormGroup;
-  countries: any[] = [];
+  countries: Country[] = [];
 
-    constructor(private fb: FormBuilder, private apiService: ApiService,
-       private dataService: DataService, private router: Router) {
+  constructor(private fb: FormBuilder, private apiService: ApiService,
+    private dataService: DataService, private router: Router) {
     this.userForm = this.fb.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       country: ['', Validators.required],
-      createdAt: ['', Validators.required]
+      createdAt: ['']
     });
   }
 
-   ngOnInit(): void {
-   this.getCountry()
-   
+  ngOnInit(): void {
+    this.getCountry()
   }
 
-  //get country list
-  getCountry(){
-    this.apiService.getCountries().subscribe((result:any) => {
+  //Get country list
+  getCountry() {
+    this.apiService.getCountries().subscribe((result: Country[]) => {
       this.countries = result;
-    },(error:any)=>{
+    }, (error: any) => {
       this.dataService.showError('Something went wrong.')
     });
   }
-   //on form submission
-   onSubmit() {
-    //update create date time
-    this.userForm.get('createdAt')?.setValue(new Date().toISOString());
-    
+  //Save data
+  onSubmit() {
     if (this.userForm.valid) {
-    const res =  this.dataService.add(this.userForm.value)
-    if(res) {
-       this.dataService.showSuccess('User Added Successfully')
-     this.router.navigate([''])
-    }
-    else this.dataService.showError('email already exist')
-    
+      this.userForm.disable();
+      //update create date time
+      this.userForm.get('createdAt')?.setValue(new Date().toISOString());
+      const res = this.dataService.add(this.userForm.value)
+      if (res) {
+        this.userForm.enable();
+        this.dataService.showSuccess('User Added Successfully.')
+        this.router.navigate([''])
+      }
+      else this.dataService.showError('Email already exist.')
+
     } else {
       this.userForm.markAllAsTouched();
     }

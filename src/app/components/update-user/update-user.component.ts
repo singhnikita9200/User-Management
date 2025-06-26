@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApiService } from '../../services/api.service';
 import { DataService } from '../../services/data.service';
+import { Country } from '../../models/country.model';
 
 
 @Component({
@@ -11,60 +12,62 @@ import { DataService } from '../../services/data.service';
   templateUrl: './update-user.component.html',
   styleUrl: './update-user.component.css'
 })
-export class UpdateUserComponent implements OnInit{
+export class UpdateUserComponent implements OnInit {
   userForm!: FormGroup;
-  countries: any[] = [];
-  email: any;
+  countries: Country[] = [];
+  email: string = '';
 
   constructor(private route: ActivatedRoute, private fb: FormBuilder,
-     private apiService: ApiService, private dataService: DataService,private router: Router) {
-     this.userForm = this.fb.group({
+    private apiService: ApiService, private dataService: DataService, private router: Router) {
+    this.userForm = this.fb.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       country: ['', Validators.required],
-      createdAt: ['', Validators.required]
+      createdAt: ['']
     });
   }
 
   ngOnInit() {
     // Get email from route param
-    this.email = this.route.snapshot.paramMap.get('email');
+    this.email = this.route.snapshot.paramMap.get('email')!;
     //get country
     this.getCountry()
     this.getUserData()
   }
 
-   //get country list
-  getCountry(){
-    this.apiService.getCountries().subscribe((result:any) => {
+  // Fetches the list of countries from the API and updates the local `countries` array.
+  getCountry(): void {
+    this.apiService.getCountries().subscribe((result: Country[]) => {
       this.countries = result;
-    },(error:any)=>{
-       this.dataService.showError('Something went wrong.')
+    }, (error: any) => {
+      this.dataService.showError('Something went wrong.')
     });
   }
-  //get user data
-  getUserData(){
-    const emailData=this.dataService.getByEmail(this.email)
-    if(emailData){
+  //Get user data
+  getUserData() {
+    const emailData = this.dataService.getByEmail(this.email)
+    if (emailData) {
       this.userForm.patchValue({
-      firstName:  emailData.firstName,
-      lastName: emailData.lastName,
-      email: emailData.email,
-      country: emailData.country,
+        firstName: emailData.firstName,
+        lastName: emailData.lastName,
+        email: emailData.email,
+        country: emailData.country,
       })
     }
   }
-   //on form submission
-   onSubmit() {
-    //update create date time
-    this.userForm.get('createdAt')?.setValue(new Date().toISOString());
-    
+  //Update data
+  onSubmit() {
     if (this.userForm.valid) {
-    const res:any =  this.dataService.update(this.email,this.userForm.value)
-    this.dataService.showSuccess('Updated Successfully')
-    this.router.navigate([''])
-    
+      this.userForm.disable();
+      //update create date time
+      this.userForm.get('createdAt')?.setValue(new Date().toISOString());
+      const res: boolean = this.dataService.update(this.email, this.userForm.value)
+      if (res) {
+        this.dataService.showSuccess('Updated Successfully')
+        this.router.navigate([''])
+      }
+
     } else {
       this.userForm.markAllAsTouched();
     }

@@ -10,52 +10,54 @@ import { debounceTime, Subject } from 'rxjs';
   templateUrl: './users-list.component.html',
   styleUrl: './users-list.component.css'
 })
-export class UsersListComponent implements OnInit{
+export class UsersListComponent implements OnInit {
   displayedColumns: string[] = ['fullName', 'email', 'country', 'createdAt', 'action'];
-  dataSource:User[]=[];
-  searchText: string=''
-  filteredUsers: User[] = []; 
+  dataSource: User[] = [];
+  searchText: string = ''
+  filteredUsers: User[] = [];
   searchChanged = new Subject<string>();
-  hoveredUser: any;
-  
-  constructor(private dataService: DataService){}
+
+  constructor(private dataService: DataService) { }
   ngOnInit(): void {
     this.getUsersData()
 
-    //apply search filter
+    //Apply search filter
     this.searchChanged.pipe(debounceTime(300)).subscribe(value => {
-    this.applyFilter(value);
-   });
+      this.applyFilter(value);
+    });
   }
-//get users data
-  getUsersData(){
+  //Get users data
+  getUsersData() {
     this.dataSource = this.dataService.getAll()
     this.filteredUsers = [...this.dataSource]
   }
-//delete user
-deleteUser(data:User){
-  this.dataService.delete(data.email)
-  this.dataService.showSuccess('Deleted Successfully')
-  setTimeout(()=>{
-    this.getUsersData()
-  },200)
- 
-}
-//apply filter method
-applyFilter(searchText: string) {
-  const search = searchText.trim().toLowerCase();
-  this.filteredUsers = this.dataSource.filter(user =>
-    (`${user.firstName} ${user.lastName} ${user.email}`)
-      .toLowerCase()
-      .includes(search)
-  );
-}
 
-//clear filter
-clear(){
-  this.searchText=''
-  this.filteredUsers = [...this.dataSource]
-}
+  //Delete user
+  deleteUser(user: User): void {
+    const deleted = this.dataService.delete(user.email);
 
+    if (deleted) {
+      this.dataService.showSuccess('User deleted successfully');
+      this.getUsersData();
+    } else {
+      this.dataService.showError('User not found or could not be deleted');
+    }
+  }
+
+  //Apply filter method
+  applyFilter(searchText: string) {
+    const search = searchText.trim().toLowerCase();
+    this.filteredUsers = this.dataSource.filter(user =>
+      (`${user.firstName} ${user.lastName} ${user.email}`)
+        .toLowerCase()
+        .includes(search)
+    );
+  }
+
+  //Clear filter
+  clear(): void {
+    this.searchText = ''
+    this.filteredUsers = [...this.dataSource]
+  }
 
 }
