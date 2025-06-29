@@ -1,40 +1,214 @@
-mat-form-field{
-    width: 100%;
-}
-.mat-form-field {
-  font-size: 14px;
-}
-
-.mat-header-cell {
-  font-weight: bold;
-  background: #f5f5f5;
+/* View Toggle (Grid / Table)*/
+.view-toggle button.active {
+  background-color: #6eb4fc73;
+  font-weight: 600;
 }
 
-.mat-row:hover {
-  background-color: #f0f8ff;
-  transition: 0.3s;
+/* Form Field Styling*/
+mat-form-field {
+  width: 100%;
 }
 
-.mat-card {
+/* Page Layout Wrapper
+   (Background, Padding, Centering)*/
+.page-wrapper {
+  background-color: #f0f2f5;
+  /* Light gray for contrast */
+  min-height: 100vh;
+  padding: 40px 20px;
+  display: flex;
+  justify-content: center;
+}
+
+/* Table Card Container
+   (Card styling for table section)*/
+.modern-table-card {
+  background-color: #fff;
   border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  /* Soft shadow */
+  transition: box-shadow 0.3s ease-in-out;
 }
 
-.breadcrumb {
-  background-color: #f8f9fa;
+/* Angular Material Table Layout*/
+.modern-mat-table {
+  width: 100%;
+  border-spacing: 0 12px;
+  border-collapse: separate;
 }
 
-  .user-card-second {
-      transition: transform 0.3s ease;
-      background-color: #ffffff; /* Ensure card is distinct from the page */
-      border-radius: 10px;
-    }
-.user-card-second:hover {
-    transform: translateY(-5px) scale(1.02);
-    z-index: 2;
+/* User Name Column with Avatar*/
+.user-name-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.user-img {
- max-height: 130px;
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
   object-fit: cover;
+  box-shadow: 0 0 0 2px #e0e0e0;
+}
+
+/* Table Action Icons*/
+.table-icon {
+  vertical-align: middle;
+  font-size: 18px;
+  margin-right: 6px;
+  color: #1976d2;
+}
+
+/* Table Action Buttons*/
+.mat-icon-button {
+  margin-right: 4px;
+  transition: background-color 0.2s ease;
   border-radius: 8px;
+}
+
+.mat-icon-button:hover {
+  background-color: rgba(25, 118, 210, 0.1);
+}
+
+/* No Data Placeholder Block*/
+.no-data-block {
+  text-align: center;
+  padding: 30px 10px;
+  font-size: 16px;
+  color: #888;
+}
+
+.no-data-block mat-icon {
+  font-size: 30px;
+  margin-bottom: 8px;
+  display: block;
+  color: #999;
+}
+
+/* Grid View: User Cards*/
+.user-card {
+  background: linear-gradient(135deg, #52a2f5 0%, #3e85cb 50%, #2a6db3 100%);
+  border-radius: 18px;
+  color: white;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.user-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
+}
+
+/* User Profile Image in Card*/
+.user-img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.5);
+}
+
+/* Card Text & Icon Styling*/
+.card-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+p {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+@media (min-width: 768px) {
+  p {
+    justify-content: flex-start;
+  }
+}
+
+mat-icon {
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+button[mat-icon-button] {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  transition: background 0.2s ease;
+}
+
+button[mat-icon-button]:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Responsive Flex Direction*/
+@media screen and (max-width: 768px) {
+
+  .user-header,
+  .user-controls {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .view-toggle {
+    justify-content: flex-start;
+  }
+}
+
+/* Action Buttons (Edit/Delete)*/
+.action-btn {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+}
+
+.action-btn.edit {
+  background-color: #e3f2fd;
+  color: #292929;
+}
+
+.action-btn.delete {
+  background-color: #ffebee;
+  margin-left: 10px;
+  color: #292929;
+}
+
+.action-btn.edit:hover {
+  background-color: #8eb2cb;
+}
+
+.action-btn.delete:hover {
+  background-color: #f7c7ce;
+}
+
+/* Gradient Button (Add User)*/
+.gradient-button {
+  background: linear-gradient(135deg, #52a2f5 0%, #3e85cb 50%, #2a6db3 100%) !important;
+  color: #fff !important;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-weight: 600;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+}
+
+.gradient-button mat-icon {
+  color: #fff !important;
+}
+
+.gradient-button:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.18);
+  transform: translateY(-2px);
 }

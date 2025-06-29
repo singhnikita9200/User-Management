@@ -1,31 +1,49 @@
-<div class="wrapper">
-  <div class="container mt-4">
-    <mat-card class="p-4">
-      <h2 class="mb-3">Edit User</h2>
+<!-- Full Page Wrapper with Background Support -->
+<div class="page-wrapper">
+  <div class="container d-flex justify-content-center">
 
+    <!-- User Edit Form Card -->
+    <mat-card class="form-card">
+
+      <!-- Back Button & Header Title -->
+      <div class="form-header d-flex align-items-center mb-4">
+        <!-- Back Navigation Button -->
+        <button mat-stroked-button color="primary" (click)="goBack()">
+          ← Back
+        </button>
+
+        <!-- Title Section -->
+        <div class="heading-content">
+          <h2>Edit User</h2>
+          <div class="heading-underline"></div>
+        </div>
+      </div>
+
+      <!-- Reactive Form -->
       <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
-        <!-- First Name -->
+
+        <!-- First Name Field -->
         <mat-form-field appearance="outline" class="w-100 mb-3">
           <mat-label>First Name</mat-label>
-          <input matInput formControlName="firstName" placeholder="Enter first name">
+          <input matInput formControlName="firstName" placeholder="Enter first name" />
           <mat-error *ngIf="userForm.get('firstName')?.hasError('required')">
             First name is required
           </mat-error>
         </mat-form-field>
 
-        <!-- Last Name -->
+        <!-- Last Name Field -->
         <mat-form-field appearance="outline" class="w-100 mb-3">
           <mat-label>Last Name</mat-label>
-          <input matInput formControlName="lastName" placeholder="Enter last name">
+          <input matInput formControlName="lastName" placeholder="Enter last name" />
           <mat-error *ngIf="userForm.get('lastName')?.hasError('required')">
             Last name is required
           </mat-error>
         </mat-form-field>
 
-        <!-- Email -->
+        <!-- Email Field (Read-only) -->
         <mat-form-field appearance="outline" class="w-100 mb-3">
           <mat-label>Email</mat-label>
-          <input matInput readonly="true" type="email" formControlName="email" placeholder="Enter email">
+          <input matInput formControlName="email" type="email" placeholder="Enter email" readonly />
           <mat-error *ngIf="userForm.get('email')?.hasError('required')">
             Email is required
           </mat-error>
@@ -34,25 +52,27 @@
           </mat-error>
         </mat-form-field>
 
-        <!-- Country -->
-        <mat-form-field appearance="outline" class="w-100 mb-3">
+        <!-- Country Dropdown with Flags -->
+        <mat-form-field appearance="outline" class="w-100 mb-4">
           <mat-label>Country</mat-label>
           <mat-select formControlName="country">
             <mat-option *ngFor="let c of countries" [value]="c.name">
-              <img [src]="c.flag" width="30" height="20" />
-              {{ c.name }}</mat-option>
+              <img [src]="c.flag" width="24" height="16" style="margin-right: 8px;" />
+              {{ c.name }}
+            </mat-option>
           </mat-select>
           <mat-error *ngIf="userForm.get('country')?.hasError('required')">
             Country is required
           </mat-error>
         </mat-form-field>
 
+        <!-- Submit (Update) Button -->
+        <div class="text-end">
+          <button mat-raised-button color="primary" type="submit" class="px-5 py-2 rounded-2">
+            Update
+          </button>
+        </div>
 
-
-        <!-- Update Button -->
-        <button mat-flat-button color="primary" type="submit" class="mt-2">
-          Update
-        </button>
       </form>
     </mat-card>
   </div>

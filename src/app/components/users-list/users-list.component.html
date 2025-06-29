@@ -1,235 +1,150 @@
-    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start"   (selectedTabChange)="clear()">
-       <!-- Grid view -->
-    <mat-tab label="Grid View">
-           <div class="container mt-4 main-contant">
-  <!-- Breadcrumb -->
-  <div class="row mb-3">
-    <div class="col-12">
-      <nav class="page-breadcrumb">
-        <ol class="breadcrumb bg-light px-3 py-2 rounded">
-          <li class="breadcrumb-item active fw-bold fs-5">User Management</li>
-        </ol>
-      </nav>
-    </div>
-  </div>
+<!-- user-list.component.html -->
+<div class="page-wrapper">
+  <div class="container mt-5">
 
-  <!-- Search + Add User -->
-  <div class="row align-items-center mb-3">
-    <div class="col-md-6 mb-2 mb-md-0">
-           <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Search User</mat-label>
-        <input matInput placeholder="Enter name or email" [(ngModel)]="searchText"   (ngModelChange)="searchChanged.next($event)"/>
-        <button
-          *ngIf="searchText"
-          matSuffix
-          mat-icon-button
-          aria-label="Clear"
-          (click)="clear()"
-        >
-          <mat-icon>close</mat-icon>
+    <!-- Custom Tabs: Grid / Table View Toggle -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div class="btn-group view-toggle" role="group">
+        <button mat-button [ngClass]="{active: dataService.viewMode === 'grid'}"
+          (click)="dataService.viewMode = 'grid'">
+          <mat-icon>grid_view</mat-icon> Grid View
         </button>
-      </mat-form-field>
-    </div>
+        <button mat-button [ngClass]="{active: dataService.viewMode === 'table'}"
+          (click)="dataService.viewMode = 'table'">
+          <mat-icon>table_chart</mat-icon> Table View
+        </button>
+      </div>
 
-    <div class="col-md-6 text-end">
-     <button
-        mat-flat-button
-        color="primary"
-        routerLink="/create-user"
-        class="text-uppercase"
-      >
-        <mat-icon class="me-1">person_add</mat-icon> Add User
+      <button mat-flat-button class="gradient-button" routerLink="/create-user">
+        <mat-icon class="me-1">person_add</mat-icon>
+        Add User
       </button>
     </div>
-  </div>
 
-  <!-- User Cards -->
-  <div class="row g-4 pb-4" *ngIf="filteredUsers.length > 0; else noData">
-  <div
-    class="col-12 col-md-6"
-    *ngFor="let user of filteredUsers"
-  >
-    <div class="card shadow-sm border-0 user-card-second h-100 shadow-lg">
-      <div class="row align-items-center">
-        <!-- Image -->
-        <div class="col-4 text-center p-2">
-          <img
-            [src]="'userimg.avif'"
-            class="img-fluid rounded user-img-left"
-            alt="User Image"
-          />
-        </div>
+    <!-- Search Field -->
+    <mat-form-field appearance="outline" class="w-100 mb-4">
+      <mat-label>Search User</mat-label>
+      <input matInput placeholder="Enter name or email" [(ngModel)]="searchText"
+        (ngModelChange)="searchChanged.next($event)" />
+      <button *ngIf="searchText" matSuffix mat-icon-button aria-label="Clear" (click)="clear()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
 
-        <!-- Info -->
-        <div class="col-8">
-          <div class="card-body">
-            <h5 class="card-title mb-1">
-              {{ user.firstName }} {{ user.lastName }}
-            </h5>
-            <p class="card-text small text-muted mb-1">
-              <strong>Email:</strong> {{ user.email }}
-            </p>
-            <p class="card-text small text-muted mb-1">
-              <strong>Country:</strong> {{ user.country }}
-            </p>
-            <p class="card-text small text-muted">
-              <strong>Created:</strong> {{ user.createdAt | date:'medium' }}
-            </p>
+    <!-- Grid View -->
+    <div *ngIf="dataService.viewMode === 'grid'">
+      <div class="row g-4 pb-4" *ngIf="filteredUsers.length > 0; else noData">
+        <div class="col-12 col-sm-6 col-lg-4" *ngFor="let user of filteredUsers">
+          <div class="card user-card shadow-lg border-0 h-100">
+            <div class="d-flex flex-column flex-md-row align-items-top p-3">
+              <img src="userimg.avif" class="user-img mb-3 mb-md-0 me-md-3" alt="User" />
+              <div class="flex-grow-1 text-center text-md-start">
+                <h5 class="card-title mb-1">{{ user.firstName }} {{ user.lastName }}</h5>
+                <p class="mb-1 small"><mat-icon class="me-1">email</mat-icon>{{ user.email }}</p>
+                <p class="mb-1 small"><mat-icon class="me-1">public</mat-icon>{{ user.country }}</p>
+                <p class="mb-2 small"><mat-icon class="me-1">calendar_today</mat-icon>{{ user.createdAt | date:
+                  'mediumDate' }}</p>
 
-            <div class="mt-2">
-              <a
-                [routerLink]="'/update-user/' + user.email"
-                class="btn btn-sm btn-outline-primary me-2"
-              >
-                <i class="bi bi-pencil"></i> Edit
-              </a>
-              <button
-                class="btn btn-sm btn-outline-danger"
-                (click)="deleteUser(user)"
-              >
-                <i class="bi bi-trash"></i> Delete
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- No Data  -->
-<ng-template #noData>
-  <div class="col-12">
-    <div class="card text-center p-4 mt-4 shadow-sm">
-      <div class="card-body">
-        <h5 class="card-title">No Users Found</h5>
-        <p class="card-text text-muted">
-          Try adding a user to get started.
-        </p>
-      </div>
-    </div>
-  </div>
-</ng-template>
-
-</div>
-    </mat-tab>
-
- <!-- Table view -->
-  <mat-tab label="Table View" >
-      <div class="container mt-4">
-    <!-- Breadcrumb -->
-    <div class="row mb-3">
-      <div class="col-12">
-        <nav class="page-breadcrumb">
-          <ol class="breadcrumb bg-light px-3 py-2 rounded">
-            <li class="breadcrumb-item active fw-bold fs-5">User Management</li>
-          </ol>
-        </nav>
-      </div>
-    </div>
-
-    <!-- Search + Add User -->
-    <div class="row align-items-center mb-3">
-      <div class="col-md-6 mb-2 mb-md-0">
-        <mat-form-field appearance="outline" class="w-100">
-          <mat-label>Search User</mat-label>
-          <input matInput placeholder="Enter name or email" [(ngModel)]="searchText"   (ngModelChange)="searchChanged.next($event)"/>
-          <button
-            *ngIf="searchText"
-            matSuffix
-            mat-icon-button
-            aria-label="Clear"
-            (click)="clear()"
-          >
-            <mat-icon>close</mat-icon>
-          </button>
-        </mat-form-field>
-      </div>
-
-      <div class="col-md-6 text-end">
-        <button
-          mat-flat-button
-          color="primary"
-          routerLink="/create-user"
-          class="text-uppercase"
-        >
-          <mat-icon class="me-1">person_add</mat-icon> Add User
-        </button>
-      </div>
-    </div>
-
-    <!-- User Table -->
-    <div class="row">
-      <div class="col-12">
-        <mat-card class="p-3">
-          <div class="table-responsive">
-            <table
-              mat-table
-              [dataSource]="filteredUsers"
-              class="mat-elevation-z1 w-100"
-              *ngIf="filteredUsers.length > 0"
-            >
-              <!-- Full Name -->
-              <ng-container matColumnDef="fullName">
-                <th mat-header-cell *matHeaderCellDef> Full name</th>
-                <td mat-cell *matCellDef="let element">
-                  {{ element.firstName }} {{element.lastName}}
-                </td>
-              </ng-container>
-
-
-              <!-- Email -->
-              <ng-container matColumnDef="email">
-                <th mat-header-cell *matHeaderCellDef> Email </th>
-                <td mat-cell *matCellDef="let element"> {{ element.email }} </td>
-              </ng-container>
-              <ng-container matColumnDef="country">
-                <th mat-header-cell *matHeaderCellDef> Country </th>
-                <td mat-cell *matCellDef="let element">
-                  {{ element.country }}
-                </td>
-              </ng-container>
-              <ng-container matColumnDef="createdAt">
-                <th mat-header-cell *matHeaderCellDef> Created At </th>
-                <td mat-cell *matCellDef="let element">
-                  {{ element.createdAt | date:'medium'}}
-                </td>
-              </ng-container>
-              <ng-container matColumnDef="action">
-                <th mat-header-cell *matHeaderCellDef> Actions </th>
-                <td mat-cell *matCellDef="let element">
-                  <button mat-icon-button routerLink="/update-user/{{element.email}}" aria-label="Edit user">
+                <div class="d-flex justify-content-center justify-content-md-start gap-2">
+                  <button mat-icon-button color="accent" [routerLink]="'/update-user/' + user.email" aria-label="Edit">
                     <mat-icon>edit</mat-icon>
                   </button>
-                  <button mat-icon-button (click)="deleteUser(element)" aria-label="Delete user">
+                  <button mat-icon-button color="warn" (click)="deleteUser(user)" aria-label="Delete">
                     <mat-icon>delete</mat-icon>
                   </button>
-                
-                </td>
-              </ng-container>
-
-              <!-- Rows -->
-              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-            </table>
-            <!-- No data message -->
-            <div *ngIf="filteredUsers.length === 0" class="text-center p-4">
-              No data available
+                </div>
+              </div>
             </div>
           </div>
-        </mat-card>
+        </div>
       </div>
     </div>
+
+
+
+
+    <!-- Table View -->
+    <div *ngIf="dataService.viewMode === 'table'">
+      <mat-card class="modern-table-card">
+        <div class="table-wrapper">
+          <table mat-table [dataSource]="filteredUsers" class="modern-mat-table" *ngIf="filteredUsers.length > 0">
+
+            <!-- Full Name -->
+            <ng-container matColumnDef="fullName">
+              <th mat-header-cell *matHeaderCellDef>
+                Name
+              </th>
+              <td mat-cell *matCellDef="let user">
+                <div class="user-name-cell">
+                  <img src="userimg.avif" alt="Avatar" class="user-avatar" />
+                  <span>{{ user.firstName }} {{ user.lastName }}</span>
+                </div>
+              </td>
+            </ng-container>
+
+            <!-- Email -->
+            <ng-container matColumnDef="email">
+              <th mat-header-cell *matHeaderCellDef>
+                Email
+              </th>
+              <td mat-cell *matCellDef="let user">{{ user.email }}</td>
+            </ng-container>
+
+            <!-- Country -->
+            <ng-container matColumnDef="country">
+              <th mat-header-cell *matHeaderCellDef>
+                Country
+              </th>
+              <td mat-cell *matCellDef="let user">{{ user.country }}</td>
+            </ng-container>
+
+            <!-- Created Date -->
+            <ng-container matColumnDef="createdAt">
+              <th mat-header-cell *matHeaderCellDef>
+                Created
+              </th>
+              <td mat-cell *matCellDef="let user">
+                {{ user.createdAt | date: 'mediumDate' }}
+              </td>
+            </ng-container>
+
+            <!-- Actions -->
+            <ng-container matColumnDef="action">
+              <th mat-header-cell *matHeaderCellDef>
+                Actions
+              </th>
+              <td mat-cell *matCellDef="let user">
+                <button class="action-btn edit" [routerLink]="['/update-user', user.email]" matTooltip="Edit">
+                  <i class="fas fa-edit"></i> Edit
+                </button>
+                <button class="action-btn delete" (click)="deleteUser(user)" matTooltip="Delete">
+                  <i class="fas fa-trash"></i> Delete
+                </button>
+              </td>
+            </ng-container>
+
+            <!-- Header & Row Definitions -->
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          </table>
+
+          <!-- No Data -->
+          <div *ngIf="filteredUsers.length === 0" class="no-data-block">
+            <mat-icon>info</mat-icon>
+            No users found.
+          </div>
+        </div>
+      </mat-card>
+
+
+    </div>
+
+    <!-- No Data -->
+    <ng-template #noData>
+      <div class="text-center p-5 text-muted">
+        No users found. Try adding one.
       </div>
-        
-  </mat-tab>
-    </mat-tab-group>
+    </ng-template>
 
-
-
-
-
-
-
-
-
+  </div>
+</div>

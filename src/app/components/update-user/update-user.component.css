@@ -1,21 +1,76 @@
-.wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  overflow: auto; /* Scroll only if needed */
-  padding: 1rem;
-  box-sizing: border-box;
-}
-
+/* Container & Layout */
 .container {
   max-width: 600px;
   width: 100%;
 }
-mat-card {
-  border-radius: 12px;
+
+/* Light background for the page wrapper */
+.page-wrapper {
+  background: #f4f6f9; /* Light gray */
+  min-height: 100vh;
+  display: flex;
+  align-items: center;         /* Center vertically */
+  justify-content: center;     /* Center horizontally */
+  padding: 24px;               /* Prevent overflow on small screens */
+  box-sizing: border-box;      /* Include padding in height/width */
 }
 
+/*  Form Card Styling */
+mat-card,
+.form-card {
+  width: 100%;
+  max-width: 600px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #e3f2fd, #ffffff);
+  padding: 32px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.form-card:hover {
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.15);
+}
+
+/* Form Fields */
 mat-form-field {
   display: block;
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+/*  Header: Back Button + Title */
+.form-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.heading-content {
+  margin-left: 12px;
+}
+
+.heading-content h2 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.heading-underline {
+  width: 60px;
+  height: 4px;
+  background-color: #1976d2;
+  margin-top: 6px;
+  border-radius: 2px;
+}
+
+/* Button Styling*/
+.submit-btn {
+  padding: 8px 24px;
+  font-size: 1rem;
+  border-radius: 8px;
+}
+
+.text-end {
+  text-align: end;
 }

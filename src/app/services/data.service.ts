@@ -1,14 +1,21 @@
-import { Injectable } from '@angular/core';
-import { ToastrService } from 'ngx-toastr';
+import { inject, Injectable } from '@angular/core';
 import { User } from '../models/user.model';
+import {
+  MatSnackBar,
+  MatSnackBarHorizontalPosition,
+  MatSnackBarVerticalPosition,
+} from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DataService {
   private userKey = 'users';
-
-  constructor(private toastr: ToastrService) {}
+  private _snackBar = inject(MatSnackBar);
+  horizontalPosition: MatSnackBarHorizontalPosition = 'end';
+  verticalPosition: MatSnackBarVerticalPosition = 'top';
+  viewMode: 'table' | 'grid' = 'grid'; // default is table
+  constructor() { }
 
   //Get all users
   getAll(): User[] {
@@ -67,12 +74,20 @@ export class DataService {
     );
   }
 
-  //Toast notifications
+  //Show success message
   showSuccess(msg: string): void {
-    this.toastr.success(msg);
+    this._snackBar.open(msg, 'Close', {
+      duration: 3000,
+      horizontalPosition: this.horizontalPosition,
+      verticalPosition: this.verticalPosition,
+    });
   }
-
+  //Show erro message
   showError(msg: string): void {
-    this.toastr.error(msg);
+    this._snackBar.open(msg, 'Close', {
+      duration: 3000,
+      horizontalPosition: this.horizontalPosition,
+      verticalPosition: this.verticalPosition,
+    });
   }
 }
